@@ -1,6 +1,7 @@
 package org.example.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -50,9 +51,9 @@ public class BasePage {
     protected void selectByVisibleText(WebElement element, String text) {
         Select select = new Select(wait.until(ExpectedConditions.visibilityOf(element)));
         select.selectByVisibleText(text);
+        // Select option from dropdown by value
     }
 
-    // Select option from dropdown by value
     protected void selectByValue(WebElement element, String value) {
         Select select = new Select(wait.until(ExpectedConditions.visibilityOf(element)));
         select.selectByValue(value);
@@ -78,5 +79,6 @@ public class BasePage {
     protected void hoverOverElement(WebElement element) {
         Actions actions = new Actions(driver);
         actions.moveToElement(element).perform();
+        //actions.keyDown(Keys.CONTROL).sendKeys("C").keyUp(Keys.CONTROL).build().perform();
     }
 }

@@ -4,25 +4,30 @@ import org.example.base.BaseTest;
 import org.example.pages.account.LoginPage;
 import org.example.pages.common.HomePage;
 import org.example.pages.common.Navigation;
-import org.example.utils.TestData;
+import org.example.utils.TestDataProvider;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
 
+import java.util.Map;
+
 public class LoginTest extends BaseTest {
 
-    @Test(description = "Test successful login functionality")
-    public void testSuccessfulLogin() {
-        Reporter.log("Starting login test", true);
+    @Test(groups = "login", dependsOnGroups = "signup", dataProvider = "loginData", dataProviderClass = TestDataProvider.class,
+            description = "Test login functionality with different credentials")
+    public void testLogin(Map<String, String> data) {
+        Reporter.log("Starting login test with credentials: " + data.get("id"), true);
 
         Navigation navigation = new Navigation(driver);
         LoginPage loginPage = navigation.navigateToLoginSignup();
-        Reporter.log("Navigated to login page", true);
 
-        HomePage homePage = loginPage.login(TestData.getEmail(), TestData.getPassword());
-        Reporter.log("Performed login with credentials", true);
+        HomePage homePage = loginPage.login(data.get("email"), data.get("password"));
 
-        Assert.assertTrue(homePage.isLoggedIn(), "User should be logged in successfully");
-        Reporter.log("Verified user is logged in", true);
+        boolean shouldSucceed = Boolean.parseBoolean(data.get("shouldSucceed"));
+        if (shouldSucceed) {
+            Assert.assertTrue(homePage.isLoggedIn(), "User should be logged in successfully");
+        } else {
+            Assert.assertFalse(homePage.isLoggedIn(), "User should not be logged in");
+        }
     }
 }

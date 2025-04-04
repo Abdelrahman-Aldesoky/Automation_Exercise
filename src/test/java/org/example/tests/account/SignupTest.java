@@ -6,42 +6,45 @@ import org.example.pages.account.LoginPage;
 import org.example.pages.account.SignupPage;
 import org.example.pages.common.HomePage;
 import org.example.pages.common.Navigation;
-import org.example.utils.TestData;
+import org.example.utils.TestDataProvider;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
 
+import java.util.Map;
+
 public class SignupTest extends BaseTest {
 
-    @Test(description = "Test user signup functionality")
-    public void testUserSignup() {
+    @Test(groups = "signup", dataProvider = "signupData", dataProviderClass = TestDataProvider.class,
+            description = "Test user signup functionality with different data")
+    public void testUserSignup(Map<String, String> data) {
         // Log the start of the test
-        Reporter.log("Starting user signup test", true);
+        Reporter.log("Starting user signup test with data ID: " + data.get("id"), true);
 
         // Initialize navigation and navigate to login/signup page
         Navigation navigation = new Navigation(driver);
         LoginPage loginPage = navigation.navigateToLoginSignup();
         Reporter.log("Navigated to login/signup page", true);
 
-        // Create a unique email with timestamp to avoid duplicate registration issues
-        //String uniqueEmail = "abdelrahman.test" + System.currentTimeMillis() + "@example.com";
-        //Reporter.log("Using email: " + uniqueEmail, true);
+        // Create full name from first and last name
+        String fullName = data.get("firstName") + " " + data.get("lastName");
 
-        String email = TestData.getEmail();
+        // Use email directly from Excel data without modification
+        String email = data.get("email");
         Reporter.log("Using email: " + email, true);
 
         // Enter signup details and submit
-        loginPage.enterSignupDetails(TestData.getFullName(), email);
+        loginPage.enterSignupDetails(fullName, email);
         Reporter.log("Entered signup details successfully", true);
 
         // Fill in account details on the signup page
         SignupPage signupPage = new SignupPage(driver);
-        signupPage.selectTitle(TestData.getTitle());
-        signupPage.enterPassword(TestData.getPassword());
+        signupPage.selectTitle(data.get("title"));
+        signupPage.enterPassword(data.get("password"));
         signupPage.selectDateOfBirth(
-                TestData.getDayOfBirth(),
-                TestData.getMonthOfBirth(),
-                TestData.getYearOfBirth()
+                data.get("dayOfBirth"),
+                data.get("monthOfBirth"),
+                data.get("yearOfBirth")
         );
         Reporter.log("Filled personal information successfully", true);
 
@@ -52,29 +55,40 @@ public class SignupTest extends BaseTest {
 
         // Enter address information
         signupPage.enterAddressInfo(
-                TestData.getFirstName(),
-                TestData.getLastName(),
-                TestData.getAddress(),
-                TestData.getState(),
-                TestData.getCity(),
-                TestData.getZipCode(),
-                TestData.getMobileNumber()
+                data.get("firstName"),
+                data.get("lastName"),
+                data.get("address"),
+                data.get("state"),
+                data.get("city"),
+                data.get("zipCode"),
+                data.get("mobileNumber")
         );
         Reporter.log("Entered address information successfully", true);
 
         // Select country and create account
-        signupPage.selectCountry(TestData.getCountry());
-        Reporter.log("Selected country: " + TestData.getCountry(), true);
+        signupPage.selectCountry(data.get("country"));
+        Reporter.log("Selected country: " + data.get("country"), true);
 
         AccountCreatedPage accountCreatedPage = signupPage.clickCreateAccount();
         Reporter.log("Clicked create account button", true);
 
         // Verify account creation success
         boolean isAccountCreated = accountCreatedPage.isAccountCreatedSuccessfully();
-        Assert.assertTrue(isAccountCreated, "Account was not created successfully");
 
-        // Continue to homepage after successful account creation
-        HomePage homePage = accountCreatedPage.clickContinue();
-        Reporter.log("Navigated to homepage after successful account creation", true);
+        // Check if signup should succeed
+        boolean shouldSucceed = true;
+        if (data.containsKey("shouldSucceed")) {
+            shouldSucceed = Boolean.parseBoolean(data.get("shouldSucceed"));
+        }
+
+        if (shouldSucceed) {
+            Assert.assertTrue(isAccountCreated, "Account was not created successfully");
+
+            // Continue to homepage after successful account creation
+            HomePage homePage = accountCreatedPage.clickContinue();
+            Reporter.log("Navigated to homepage after successful account creation", true);
+        } else {
+            Assert.assertFalse(isAccountCreated, "Account should not have been created");
+        }
     }
 }

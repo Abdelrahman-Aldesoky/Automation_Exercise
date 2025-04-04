@@ -1,90 +1,121 @@
 package org.example.utils;
 
+import java.util.Map;
+
 public class TestData {
-    // User data as direct variables
-    private static final String firstName = "Abdelrahman";
-    private static final String lastName = "Aldesoky";
-    private static final String fullName = firstName+" "+lastName;
-    private static final String email = "abdelrahman.mohamed.aldesoky@gmail.com";
-    //private static final String dynamic_email = System.currentTimeMillis()+"@example.com";
-    private static final String password = "helloDepi!";
-    private static final String address = "14 Alghawas Abdelaziz shehata";
-    private static final String state = "Cairo";
-    private static final String city = "Nasr City";
-    private static final String zipCode = "11727";
-    private static final String mobileNumber = "01007016760";
-    private static final String country = "Canada";
-    private static final String title = "Mr";
-    private static final String dayOfBirth = "10";
-    private static final String monthOfBirth = "8";
-    private static final String yearOfBirth = "1990";
+    private static final String SIGNUP_FILE = "signup_data.xlsx";
+    private static final String LOGIN_FILE = "login_data.xlsx";
+    private static final String PRODUCT_FILE = "purchase_test_data.xlsx";
 
-    // Product data as direct variable
-    private static final int productId = 1;
+    // Default test data ID
+    private static final String DEFAULT_DATA_ID = "default";
 
-    // Getters for user data
-    public static String getFirstName() {
-        return firstName;
+    // Get user signup data
+    public static Map<String, String> getSignupData() {
+        return getSignupData(DEFAULT_DATA_ID);
     }
 
-    public static String getLastName() {
-        return lastName;
+    public static Map<String, String> getSignupData(String dataId) {
+        return ExcelUtils.getTestDataByRowId(SIGNUP_FILE, "UserData", "id", dataId);
     }
 
-    public static String getFullName() {
-        return fullName;
+    // Get login credentials
+    public static Map<String, String> getLoginData() {
+        return getLoginData(DEFAULT_DATA_ID);
     }
 
+    public static Map<String, String> getLoginData(String dataId) {
+        return ExcelUtils.getTestDataByRowId(LOGIN_FILE, "Credentials", "id", dataId);
+    }
+
+    // Get product data
+    public static Map<String, String> getProductData() {
+        return getProductData(DEFAULT_DATA_ID);
+    }
+
+    public static Map<String, String> getProductData(String dataId) {
+        return ExcelUtils.getTestDataByRowId(PRODUCT_FILE, "Products", "id", dataId);
+    }
+
+    // Convenience methods for login data
     public static String getEmail() {
-        return email;
+        Map<String, String> data = getLoginData();
+        return data.get("email");
     }
 
     public static String getPassword() {
-        return password;
+        Map<String, String> data = getLoginData();
+        return data.get("password");
+    }
+
+    // Convenience methods for signup data
+    public static String getFirstName() {
+        Map<String, String> data = getSignupData();
+        return data.get("firstName");
+    }
+
+    public static String getLastName() {
+        Map<String, String> data = getSignupData();
+        return data.get("lastName");
+    }
+
+    public static String getFullName() {
+        return getFirstName() + " " + getLastName();
     }
 
     public static String getAddress() {
-        return address;
+        Map<String, String> data = getSignupData();
+        return data.get("address");
     }
 
     public static String getState() {
-        return state;
+        Map<String, String> data = getSignupData();
+        return data.get("state");
     }
 
     public static String getCity() {
-        return city;
+        Map<String, String> data = getSignupData();
+        return data.get("city");
     }
 
     public static String getZipCode() {
-        return zipCode;
+        Map<String, String> data = getSignupData();
+        return data.get("zipCode");
     }
 
     public static String getMobileNumber() {
-        return mobileNumber;
+        Map<String, String> data = getSignupData();
+        return data.get("mobileNumber");
     }
 
     public static String getCountry() {
-        return country;
+        Map<String, String> data = getSignupData();
+        return data.get("country");
     }
 
     public static String getTitle() {
-        return title;
+        Map<String, String> data = getSignupData();
+        return data.get("title");
     }
 
     public static String getDayOfBirth() {
-        return dayOfBirth;
+        Map<String, String> data = getSignupData();
+        return data.get("dayOfBirth");
     }
 
     public static String getMonthOfBirth() {
-        return monthOfBirth;
+        Map<String, String> data = getSignupData();
+        return data.get("monthOfBirth");
     }
 
     public static String getYearOfBirth() {
-        return yearOfBirth;
+        Map<String, String> data = getSignupData();
+        return data.get("yearOfBirth");
     }
 
-    // Getter for product ID
+    // Convenience methods for product data
     public static int getProductId() {
-        return productId;
+        Map<String, String> data = getProductData();
+        return Integer.parseInt(data.get("productId"));
     }
 }

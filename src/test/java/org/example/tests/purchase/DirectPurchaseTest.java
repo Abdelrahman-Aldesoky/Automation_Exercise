@@ -8,60 +8,59 @@ import org.example.pages.checkout.PaymentPage;
 import org.example.pages.common.HomePage;
 import org.example.pages.common.Navigation;
 import org.example.pages.product.ProductsPage;
-import org.example.utils.TestData;
+import org.example.utils.TestDataProvider;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
 
+import java.util.Map;
+
 public class DirectPurchaseTest extends BaseTest {
 
-    @Test(description = "Test direct purchase from products page")
-    public void testDirectAddToCartAndCheckout() {
-        // Log the start of the test
-        Reporter.log("Starting direct purchase test", true);
+    @Test(groups = "purchase", dependsOnGroups = "login", dataProvider = "purchaseTestData", dataProviderClass = TestDataProvider.class,
+            description = "Test direct purchase from products page")
+    public void testDirectAddToCartAndCheckout(Map<String, String> data) {
+        Reporter.log("Starting direct purchase test: " + data.get("testDescription"), true);
 
-        // Login first
         Navigation navigation = new Navigation(driver);
         LoginPage loginPage = navigation.navigateToLoginSignup();
         Reporter.log("Navigated to login page", true);
 
-        HomePage homePage = loginPage.login(TestData.getEmail(), TestData.getPassword());
+        HomePage homePage = loginPage.login(data.get("email"), data.get("password"));
         Reporter.log("Logged in successfully", true);
 
-        // Verify login was successful
         Assert.assertTrue(homePage.isLoggedIn(), "User should be logged in");
         Reporter.log("Verified user is logged in", true);
 
-        // Navigate to products page
         ProductsPage productsPage = navigation.navigateToProducts();
         Reporter.log("Navigated to products page", true);
 
-        // Add product to cart after hovering on the product
-        productsPage.addToCartAfterHovering(TestData.getProductId());
+        int productId = Integer.parseInt(data.get("productId"));
+        productsPage.addToCartAfterHovering(productId);
         Reporter.log("Added product to cart from products page", true);
 
-        // View cart from modal
         CartPage cartPage = productsPage.viewCart();
         Reporter.log("Navigated to cart page", true);
 
-        // Verify product is in cart
-        Assert.assertTrue(cartPage.isProductInCart(TestData.getProductId()), "Product should be in cart");
+        Assert.assertTrue(cartPage.isProductInCart(productId), "Product should be in cart");
         Reporter.log("Verified product is in cart", true);
 
-        // Proceed to checkout
         CheckoutPage checkoutPage = cartPage.proceedToCheckout();
         Reporter.log("Proceeded to checkout", true);
 
-        // Verify product is in checkout
-        Assert.assertTrue(checkoutPage.isProductInCheckout(TestData.getProductId()), "Product should be in checkout");
+        Assert.assertTrue(checkoutPage.isProductInCheckout(productId), "Product should be in checkout");
         Reporter.log("Verified product is in checkout", true);
 
-        // Place order to reach payment page
         PaymentPage paymentPage = checkoutPage.placeOrder();
         Reporter.log("Placed order to reach payment page", true);
 
-        // Verify we're on the payment page
-        Assert.assertTrue(paymentPage.isOnPaymentPage(), "Should be on payment page");
-        Reporter.log("Verified we are on payment page", true);
+        boolean shouldSucceed = Boolean.parseBoolean(data.get("shouldSucceed"));
+        if (shouldSucceed) {
+            Assert.assertTrue(paymentPage.isOnPaymentPage(), "Should be on payment page");
+            Reporter.log("Verified we are on payment page", true);
+        } else {
+            Assert.assertFalse(paymentPage.isOnPaymentPage(), "Should not be on payment page");
+            Reporter.log("Verified payment failed as expected", true);
+        }
     }
 }

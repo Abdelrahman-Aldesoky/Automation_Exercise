@@ -4,6 +4,15 @@
     <test name="E2E Tests">
         <parameter name="browser" value="chrome"/>
         <parameter name="url" value="https://www.automationexercise.com"/>
+
+        <groups>
+            <run>
+                <include name="signup"/>
+                <include name="login"/>
+                <include name="purchase"/>
+            </run>
+        </groups>
+
         <classes>
             <class name="org.example.tests.account.SignupTest"/>
             <class name="org.example.tests.account.LoginTest"/>
