@@ -12,19 +12,16 @@ public class BaseTest {
     protected WebDriver driver;
     @BeforeMethod
     @Parameters({"browser", "url"})
+
     public void setUp(@Optional("chrome") String browser,
                       @Optional("https://www.automationexercise.com") String url) {
-        // Setup WebDriver based on browser parameter
         initializeDriver(browser);
 
-        // Configure browser
         configureDriver();
 
-        // Navigate to the website
         driver.get(url);
     }
 
-    //helper method to init the driver
     private void initializeDriver(String browser) {
         switch (browser.toLowerCase()) {
             case "firefox":
@@ -42,7 +39,6 @@ public class BaseTest {
         }
     }
 
-    //helper method to configure the driver
     private void configureDriver() {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));

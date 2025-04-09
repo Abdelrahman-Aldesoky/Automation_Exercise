@@ -24,10 +24,12 @@ public class DeleteAccountTest extends BaseTest {
         Reporter.log("Starting account deletion test for account: " + data.get("id"), true);
 
         Navigation navigation = new Navigation(driver);
-        LoginPage loginPage = navigation.navigateToLoginSignup();
+        navigation.navigateToLoginSignup();
+        LoginPage loginPage = new LoginPage(driver);
         Reporter.log("Navigated to login page", true);
 
-        HomePage homePage = loginPage.login(data.get("email"), data.get("password"));
+        loginPage.login(data.get("email"), data.get("password"));
+        HomePage homePage = new HomePage(driver);
         Reporter.log("Attempted login with email: " + data.get("email"), true);
 
         boolean shouldSucceed = Boolean.parseBoolean(data.get("shouldSucceed"));
@@ -37,14 +39,16 @@ public class DeleteAccountTest extends BaseTest {
             Assert.assertTrue(homePage.isLoggedIn(), "User is not logged in");
             Reporter.log("Verified user is logged in", true);
 
-            AccountDeletedPage accountDeletedPage = homePage.clickDeleteAccount();
+            homePage.clickDeleteAccount();
+            AccountDeletedPage accountDeletedPage = new AccountDeletedPage(driver);
             Reporter.log("Clicked on Delete Account button", true);
 
             boolean isAccountDeleted = accountDeletedPage.isAccountDeletedSuccessfully();
             Assert.assertTrue(isAccountDeleted, "Account was not deleted successfully");
             Reporter.log("Account deleted successfully", true);
 
-            homePage = accountDeletedPage.clickContinue();
+            accountDeletedPage.clickContinue();
+            homePage = new HomePage(driver);
             Reporter.log("Clicked continue after account deletion", true);
         } else {
             // For invalid credentials, verify login failed

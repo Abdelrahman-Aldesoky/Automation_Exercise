@@ -15,9 +15,8 @@ public class CheckoutPage extends BasePage {
         super(driver);
     }
 
-    public PaymentPage placeOrder() {
+    public void placeOrder() {
         click(placeOrderButton);
-        return new PaymentPage(driver);
     }
 
     public boolean isProductInCheckout(int productId) {

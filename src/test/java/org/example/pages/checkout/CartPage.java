@@ -15,14 +15,12 @@ public class CartPage extends BasePage {
         super(driver);
     }
 
-    public CheckoutPage proceedToCheckout() {
+    public void proceedToCheckout() {
         click(proceedToCheckoutButton);
-        return new CheckoutPage(driver);
     }
 
     public boolean isProductInCart(int productId) {
         try {
-            // Check if product with specific ID is present in cart
             WebElement productElement = driver.findElement(
                     By.xpath("//a[@href='/product_details/" + productId + "']"));
             return productElement.isDisplayed();

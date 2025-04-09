@@ -1,22 +1,24 @@
 package org.example.pages.product;
 
 import org.example.pages.BasePage;
-import org.example.pages.checkout.CartPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class ProductsPage extends BasePage {
+
+    @FindBy(xpath = "//div[@class='modal-content']//a[@href='/view_cart']")
+    private WebElement viewCartButton;
 
     public ProductsPage(WebDriver driver) {
         super(driver);
     }
 
-    public ProductDetailsPage navigateToProductDetailsPage(int productId) {
-        WebElement productLink = waitForClickability(
+    public void navigateToProductDetailsPage(int productId) {
+        WebElement productLink = driver.findElement(
                 By.xpath("//a[@href='/product_details/" + productId + "']"));
         click(productLink);
-        return new ProductDetailsPage(driver);
     }
 
     public void addToCartAfterHovering(int productId) {
@@ -28,21 +30,18 @@ public class ProductsPage extends BasePage {
         hoverOverElement(productContainer);
 
         // Then click the Add to Cart button in the overlay
-        WebElement productAddToCartButton = waitForClickability(
+        WebElement productAddToCartButton = driver.findElement(
                 By.xpath("//div[@class='product-overlay']//a[@data-product-id='" + productId + "']"));
         click(productAddToCartButton);
     }
 
     public void addToCartDirectly(int productId) {
-        WebElement productAddToCartButton = waitForClickability(
+        WebElement productAddToCartButton = driver.findElement(
                 By.xpath("//div[@class='productinfo text-center']//a[@data-product-id='" + productId + "']"));
         click(productAddToCartButton);
     }
 
-    public CartPage viewCart() {
-        WebElement viewCartButton = waitForClickability(
-                By.xpath("//div[@class='modal-content']//a[@href='/view_cart']"));
+    public void viewCart() {
         click(viewCartButton);
-        return new CartPage(driver);
     }
 }

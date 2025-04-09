@@ -1,7 +1,6 @@
 package org.example.pages.account;
 
 import org.example.pages.BasePage;
-import org.example.pages.common.HomePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -32,11 +31,10 @@ public class LoginPage extends BasePage {
         super(driver);
     }
 
-    public HomePage login(String email, String password) {
+    public void login(String email, String password) {
         type(loginEmailField, email);
         type(loginPasswordField, password);
         click(loginButton);
-        return new HomePage(driver);
     }
 
     public void enterSignupDetails(String name, String email) {

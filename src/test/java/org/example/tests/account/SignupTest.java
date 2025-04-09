@@ -23,7 +23,8 @@ public class SignupTest extends BaseTest {
 
         // Initialize navigation and navigate to login/signup page
         Navigation navigation = new Navigation(driver);
-        LoginPage loginPage = navigation.navigateToLoginSignup();
+        navigation.navigateToLoginSignup();
+        LoginPage loginPage = new LoginPage(driver);
         Reporter.log("Navigated to login/signup page", true);
 
         // Create full name from first and last name
@@ -69,7 +70,8 @@ public class SignupTest extends BaseTest {
         signupPage.selectCountry(data.get("country"));
         Reporter.log("Selected country: " + data.get("country"), true);
 
-        AccountCreatedPage accountCreatedPage = signupPage.clickCreateAccount();
+        signupPage.clickCreateAccount();
+        AccountCreatedPage accountCreatedPage = new AccountCreatedPage(driver);
         Reporter.log("Clicked create account button", true);
 
         // Verify account creation success
@@ -85,7 +87,8 @@ public class SignupTest extends BaseTest {
             Assert.assertTrue(isAccountCreated, "Account was not created successfully");
 
             // Continue to homepage after successful account creation
-            HomePage homePage = accountCreatedPage.clickContinue();
+            accountCreatedPage.clickContinue();
+            HomePage homePage = new HomePage(driver);
             Reporter.log("Navigated to homepage after successful account creation", true);
         } else {
             Assert.assertFalse(isAccountCreated, "Account should not have been created");

@@ -1,7 +1,6 @@
 package org.example.pages.account;
 
 import org.example.pages.BasePage;
-import org.example.pages.common.HomePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,8 +22,7 @@ public class AccountCreatedPage extends BasePage {
                 getText(successMessage).contains("ACCOUNT CREATED");
     }
 
-    public HomePage clickContinue() {
+    public void clickContinue() {
         click(continueButton);
-        return new HomePage(driver);
     }
 }

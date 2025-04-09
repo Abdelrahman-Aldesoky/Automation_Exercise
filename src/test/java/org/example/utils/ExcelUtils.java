@@ -50,7 +50,6 @@ public class ExcelUtils {
             for (int i = 0; i < dataRows.size(); i++) {
                 Row row = dataRows.get(i);
                 Map<String, String> dataMap = new HashMap<>();
-
                 for (int j = 0; j < colCount; j++) {
                     Cell cell = row.getCell(j);
                     String value = getCellValueAsString(cell);

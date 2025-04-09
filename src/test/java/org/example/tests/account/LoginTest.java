@@ -19,9 +19,11 @@ public class LoginTest extends BaseTest {
         Reporter.log("Starting login test with credentials: " + data.get("id"), true);
 
         Navigation navigation = new Navigation(driver);
-        LoginPage loginPage = navigation.navigateToLoginSignup();
+        navigation.navigateToLoginSignup();
+        LoginPage loginPage = new LoginPage(driver);
 
-        HomePage homePage = loginPage.login(data.get("email"), data.get("password"));
+        loginPage.login(data.get("email"), data.get("password"));
+        HomePage homePage = new HomePage(driver);
 
         boolean shouldSucceed = Boolean.parseBoolean(data.get("shouldSucceed"));
         if (shouldSucceed) {

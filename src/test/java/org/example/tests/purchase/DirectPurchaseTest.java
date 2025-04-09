@@ -23,35 +23,41 @@ public class DirectPurchaseTest extends BaseTest {
         Reporter.log("Starting direct purchase test: " + data.get("testDescription"), true);
 
         Navigation navigation = new Navigation(driver);
-        LoginPage loginPage = navigation.navigateToLoginSignup();
+        navigation.navigateToLoginSignup();
+        LoginPage loginPage = new LoginPage(driver);
         Reporter.log("Navigated to login page", true);
 
-        HomePage homePage = loginPage.login(data.get("email"), data.get("password"));
+        loginPage.login(data.get("email"), data.get("password"));
+        HomePage homePage = new HomePage(driver);
         Reporter.log("Logged in successfully", true);
 
         Assert.assertTrue(homePage.isLoggedIn(), "User should be logged in");
         Reporter.log("Verified user is logged in", true);
 
-        ProductsPage productsPage = navigation.navigateToProducts();
+        navigation.navigateToProducts();
+        ProductsPage productsPage = new ProductsPage(driver);
         Reporter.log("Navigated to products page", true);
 
         int productId = Integer.parseInt(data.get("productId"));
         productsPage.addToCartAfterHovering(productId);
         Reporter.log("Added product to cart from products page", true);
 
-        CartPage cartPage = productsPage.viewCart();
+        productsPage.viewCart();
+        CartPage cartPage = new CartPage(driver);
         Reporter.log("Navigated to cart page", true);
 
         Assert.assertTrue(cartPage.isProductInCart(productId), "Product should be in cart");
         Reporter.log("Verified product is in cart", true);
 
-        CheckoutPage checkoutPage = cartPage.proceedToCheckout();
+        cartPage.proceedToCheckout();
+        CheckoutPage checkoutPage = new CheckoutPage(driver);
         Reporter.log("Proceeded to checkout", true);
 
         Assert.assertTrue(checkoutPage.isProductInCheckout(productId), "Product should be in checkout");
         Reporter.log("Verified product is in checkout", true);
 
-        PaymentPage paymentPage = checkoutPage.placeOrder();
+        checkoutPage.placeOrder();
+        PaymentPage paymentPage = new PaymentPage(driver);
         Reporter.log("Placed order to reach payment page", true);
 
         boolean shouldSucceed = Boolean.parseBoolean(data.get("shouldSucceed"));

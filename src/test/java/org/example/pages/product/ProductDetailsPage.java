@@ -1,8 +1,6 @@
 package org.example.pages.product;
 
 import org.example.pages.BasePage;
-import org.example.pages.checkout.CartPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,13 +24,11 @@ public class ProductDetailsPage extends BasePage {
         click(addToCartButton);
     }
 
-    public CartPage viewCart() {
+    public void viewCart() {
         click(viewCartButton);
-        return new CartPage(driver);
     }
 
-    public ProductDetailsPage continueShopping() {
+    public void continueShopping() {
         click(continueShoppingButton);
-        return this;
     }
 }

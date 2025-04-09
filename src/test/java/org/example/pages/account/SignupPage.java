@@ -81,11 +81,11 @@ public class SignupPage extends BasePage {
     }
 
     public void checkNewsletter() {
-            click(newsletterCheckbox);
+        click(newsletterCheckbox);
     }
 
     public void checkSpecialOffers() {
-            click(specialOffersCheckbox);
+        click(specialOffersCheckbox);
     }
 
     public void enterAddressInfo(String firstName, String lastName, String address,
@@ -103,8 +103,7 @@ public class SignupPage extends BasePage {
         selectByVisibleText(countryDropdown, countryName);
     }
 
-    public AccountCreatedPage clickCreateAccount() {
+    public void clickCreateAccount() {
         click(createAccountButton);
-        return new AccountCreatedPage(driver);
     }
 }
