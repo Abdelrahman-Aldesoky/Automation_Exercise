@@ -1,6 +1,6 @@
 package org.example.tests.account;
 
-import org.example.base.BaseTest;
+import org.example.tests.BaseTest;
 import org.example.pages.account.AccountCreatedPage;
 import org.example.pages.account.LoginPage;
 import org.example.pages.account.SignupPage;

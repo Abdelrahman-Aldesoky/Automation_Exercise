@@ -1,4 +1,4 @@
-package org.example.base;
+package org.example.tests;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -10,9 +10,9 @@ import java.time.Duration;
 
 public class BaseTest {
     protected WebDriver driver;
+
     @BeforeMethod
     @Parameters({"browser", "url"})
-
     public void setUp(@Optional("chrome") String browser,
                       @Optional("https://www.automationexercise.com") String url) {
         initializeDriver(browser);
