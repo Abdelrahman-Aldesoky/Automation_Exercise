@@ -15,46 +15,52 @@ import java.util.Map;
 
 public class SignupTest extends BaseTest {
 
-    @Test(groups = "signup", dataProvider = "signupData", dataProviderClass = TestDataProvider.class,
+    @Test(dataProvider = "signupData", dataProviderClass = TestDataProvider.class,
             description = "Test user signup functionality with different data")
     public void testUserSignup(Map<String, String> data) {
-        // Log the start of the test
         Reporter.log("Starting user signup test with data ID: " + data.get("id"), true);
+        Reporter.log("Test data: " + data, true);
 
-        // Initialize navigation and navigate to login/signup page
         Navigation navigation = new Navigation(driver);
+        Reporter.log("Navigation object created", true);
+
         navigation.navigateToLoginSignup();
-        LoginPage loginPage = new LoginPage(driver);
         Reporter.log("Navigated to login/signup page", true);
 
-        // Create full name from first and last name
+        LoginPage loginPage = new LoginPage(driver);
+        Reporter.log("Login page object created", true);
+
         String fullName = data.get("firstName") + " " + data.get("lastName");
-
-        // Use email directly from Excel data without modification
         String email = data.get("email");
-        Reporter.log("Using email: " + email, true);
+        Reporter.log("Preparing to sign up with name: " + fullName + " and email: " + email, true);
 
-        // Enter signup details and submit
         loginPage.enterSignupDetails(fullName, email);
-        Reporter.log("Entered signup details successfully", true);
+        Reporter.log("Entered signup details and submitted form", true);
 
-        // Fill in account details on the signup page
         SignupPage signupPage = new SignupPage(driver);
+        Reporter.log("Signup page object created", true);
+
+        Reporter.log("Selecting title: " + data.get("title"), true);
         signupPage.selectTitle(data.get("title"));
+
+        Reporter.log("Entering password: [MASKED]", true);
         signupPage.enterPassword(data.get("password"));
+
+        Reporter.log("Selecting date of birth: " + data.get("dayOfBirth") + "/" +
+                data.get("monthOfBirth") + "/" + data.get("yearOfBirth"), true);
         signupPage.selectDateOfBirth(
                 data.get("dayOfBirth"),
                 data.get("monthOfBirth"),
                 data.get("yearOfBirth")
         );
-        Reporter.log("Filled personal information successfully", true);
 
-        // Check newsletter and special offers
+        Reporter.log("Checking newsletter subscription", true);
         signupPage.checkNewsletter();
-        signupPage.checkSpecialOffers();
-        Reporter.log("Selected newsletter and special offers", true);
 
-        // Enter address information
+        Reporter.log("Checking special offers", true);
+        signupPage.checkSpecialOffers();
+
+        Reporter.log("Entering address information", true);
         signupPage.enterAddressInfo(
                 data.get("firstName"),
                 data.get("lastName"),
@@ -64,34 +70,42 @@ public class SignupTest extends BaseTest {
                 data.get("zipCode"),
                 data.get("mobileNumber")
         );
-        Reporter.log("Entered address information successfully", true);
 
-        // Select country and create account
+        Reporter.log("Selecting country: " + data.get("country"), true);
         signupPage.selectCountry(data.get("country"));
-        Reporter.log("Selected country: " + data.get("country"), true);
 
+        Reporter.log("Clicking create account button", true);
         signupPage.clickCreateAccount();
+
         AccountCreatedPage accountCreatedPage = new AccountCreatedPage(driver);
-        Reporter.log("Clicked create account button", true);
+        Reporter.log("Account created page object initialized", true);
 
-        // Verify account creation success
         boolean isAccountCreated = accountCreatedPage.isAccountCreatedSuccessfully();
+        Reporter.log("Account creation status: " + isAccountCreated, true);
 
-        // Check if signup should succeed
         boolean shouldSucceed = true;
         if (data.containsKey("shouldSucceed")) {
             shouldSucceed = Boolean.parseBoolean(data.get("shouldSucceed"));
         }
+        Reporter.log("Expected account creation result - shouldSucceed: " + shouldSucceed, true);
 
         if (shouldSucceed) {
             Assert.assertTrue(isAccountCreated, "Account was not created successfully");
+            Reporter.log("Verified account was created successfully", true);
 
-            // Continue to homepage after successful account creation
+            Reporter.log("Clicking continue button", true);
             accountCreatedPage.clickContinue();
+
             HomePage homePage = new HomePage(driver);
             Reporter.log("Navigated to homepage after successful account creation", true);
+
+            Assert.assertTrue(homePage.isLoggedIn(), "User should be logged in after account creation");
+            Reporter.log("Verified user is logged in after account creation", true);
         } else {
             Assert.assertFalse(isAccountCreated, "Account should not have been created");
+            Reporter.log("Verified account was not created as expected", true);
         }
+
+        Reporter.log("Signup test completed for: " + data.get("id"), true);
     }
 }
