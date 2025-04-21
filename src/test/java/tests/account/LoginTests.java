@@ -1,6 +1,5 @@
 package tests.account;
 
-import data.LogoutData;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import tests.base.BaseTest;

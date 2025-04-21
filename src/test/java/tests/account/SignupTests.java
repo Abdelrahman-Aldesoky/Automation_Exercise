@@ -83,6 +83,8 @@ public class SignupTests extends BaseTest {
         AccountDeletedPage accountDeletedPage = homePageAfterSignup.navigateToDeleteAccountPage();
         Assert.assertTrue(accountDeletedPage.isAccountDeletedSuccessfully(),
                 "Account deleted message is not visible");
-        accountDeletedPage.clickContinue();
+        // 19. Verify that user is navigated to home page
+        Assert.assertTrue(accountDeletedPage.clickContinue().isHomePageVisible(),
+                "Home page is not visible after account deletion");
     }
 }
